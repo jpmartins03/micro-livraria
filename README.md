@@ -14,21 +14,21 @@ Como nosso objetivo é didático, na livraria virtual estão à venda apenas tr�
 
 No restante deste documento vamos:
 
--   Descrever o sistema, com foco na sua arquitetura.
--   Apresentar instruções para sua execução local, usando o código disponibilizado no repositório.
--   Descrever três tarefas práticas para serem realizadas pelos alunos, as quais envolvem:
-    -   Tarefa Prática #1: Implementação de uma nova operação em um dos microsserviços
-    -   Tarefa Prática #2: Implementação de um novo serviço de avaliações (reviews)
-    -   Tarefa Prática #3: Criação de containers Docker para facilitar a execução dos microsserviços
+- Descrever o sistema, com foco na sua arquitetura.
+- Apresentar instruções para sua execução local, usando o código disponibilizado no repositório.
+- Descrever três tarefas práticas para serem realizadas pelos alunos, as quais envolvem:
+  - Tarefa Prática #1: Implementação de uma nova operação em um dos microsserviços
+  - Tarefa Prática #2: Implementação de um novo serviço de avaliações (reviews)
+  - Tarefa Prática #3: Criação de containers Docker para facilitar a execução dos microsserviços
 
 ## Arquitetura
 
 A micro-livraria possui quatro microsserviços:
 
--   Front-end: microsserviço responsável pela interface com usuário, conforme mostrado na figura anterior.
--   Controller: microsserviço responsável por intermediar a comunicação entre o front-end e o backend do sistema.
--   Shipping: microserviço para cálculo de frete.
--   Inventory: microserviço para controle do estoque da livraria.
+- Front-end: microsserviço responsável pela interface com usuário, conforme mostrado na figura anterior.
+- Controller: microsserviço responsável por intermediar a comunicação entre o front-end e o backend do sistema.
+- Shipping: microserviço para cálculo de frete.
+- Inventory: microserviço para controle do estoque da livraria.
 
 Os quatro microsserviços estão implementados em **JavaScript**, usando o Node.js para execução dos serviços no back-end.
 
@@ -50,8 +50,8 @@ Optamos por usar gRPC no backend porque ele possui um desempenho melhor do que R
 
 Para viabilizar essa transparência, gRPC usa dois conceitos centrais:
 
--   uma linguagem para definição de interfaces
--   um protocolo para troca de mensagens entre aplicações clientes e servidoras.
+- uma linguagem para definição de interfaces
+- um protocolo para troca de mensagens entre aplicações clientes e servidoras.
 
 Especificamente, no caso de gRPC, a implementação desses dois conceitos ganhou o nome de **Protocol Buffer**. Ou seja, podemos dizer que:
 
@@ -84,36 +84,36 @@ A seguir vamos descrever a sequência de passos para você executar o sistema lo
 
 2. Vá para o terminal do seu sistema operacional e clone o projeto (lembre-se de incluir o seu usuário GitHub na URL antes de executar)
 
-```
-git clone https://github.com/<SEU USUÁRIO>/micro-livraria.git
-```
+    ```sh
+    git clone https://github.com/<SEU USUÁRIO>/micro-livraria.git
+    ```
 
 3. É também necessário ter o Node.js instalado na sua máquina. Se você não tem, siga as instruções para instalação contidas nessa [página](https://nodejs.org/en/download/).
 
 4. Em um terminal, vá para o diretório no qual o projeto foi clonado e instale as dependências necessárias para execução dos microsserviços:
 
-```
-cd micro-livraria
-npm install
-```
+    ```sh
+    cd micro-livraria
+    npm install
+    ```
 
 5. Inicie os microsserviços através do comando:
 
-```
-npm run start
-```
+    ```sh
+    npm run start
+    ```
 
 6. Para fins de teste, efetue uma requisição para o microsserviço responsável pela API do backend.
 
--   Se tiver o `curl` instalado na sua máquina, basta usar:
+   Se tiver o `curl` instalado na sua máquina, basta usar:
 
-```
-curl -i -X GET http://localhost:3000/products
-```
+    ```sh
+    curl -i -X GET http://localhost:3000/products
+    ```
 
--   Caso contrário, você pode fazer uma requisição acessando, no seu navegador, a seguinte URL: `http://localhost:3000/products`.
+   Caso contrário, você pode fazer uma requisição acessando, no seu navegador, a seguinte URL: `http://localhost:3000/products`.
 
-7. Teste agora o sistema como um todo, abrindo o front-end em um navegador: <http://localhost:5000>. Faça então um teste das principais funcionalidades da livraria.
+7. Teste agora o sistema como um todo, abrindo o front-end em um navegador: <http://localhost:8080>. Faça então um teste das principais funcionalidades da livraria.
 
 ## Tarefa Prática #1: Implementando uma Nova Operação
 
@@ -121,7 +121,7 @@ Nesta primeira tarefa, você irá implementar uma nova operação no serviço `I
 
 Como descrito anteriormente, as assinaturas das operações de cada microsserviço são definidas em um arquivo `.proto`, no caso [proto/inventory.proto](https://github.com/hsborges/micro-livraria/blob/main/proto/inventory.proto).
 
-#### Passo 1
+### Passo 1
 
 Primeiro, você deve declarar a assinatura da nova operação. Para isso, inclua a definição dessa assinatura no referido arquivo `.proto` (na linha logo após a assinatura da função `SearchAllProducts`):
 
@@ -134,7 +134,7 @@ service InventoryService {
 
 Em outras palavras, você está definindo que o microsserviço `Inventory` vai responder a uma nova requisição, chamada `SearchProductByID`, que tem como parâmetro de entrada um objeto do tipo `Payload` e como parâmetro de saída um objeto do tipo `ProductResponse`.
 
-#### Passo 2
+### Passo 2
 
 Inclua também no mesmo arquivo a declaração do tipo do objeto `Payload`, o qual apenas contém o ID do produto a ser pesquisado.
 
@@ -165,7 +165,7 @@ message ProductResponse {
 }
 ```
 
-#### Passo 3
+### Passo 3
 
 Agora você deve implementar a função `SearchProductByID` no arquivo [services/inventory/index.js](https://github.com/hsborges/micro-livraria/blob/main/services/inventory/index.js).
 
@@ -186,17 +186,17 @@ De forma semelhante à função `SearchAllProducts`, que já está implementada,
 
 A função acima usa o método `find` para pesquisar em `products` pelo ID de produto fornecido. Veja que:
 
--   `payload` é o parâmetro de entrada do nosso serviço, conforme definido antes no arquivo .proto (passo 2). Ele armazena o ID do produto que queremos pesquisar. Para acessar esse ID basta escrever `payload.request.id`.
+- `payload` é o parâmetro de entrada do nosso serviço, conforme definido antes no arquivo .proto (passo 2). Ele armazena o ID do produto que queremos pesquisar. Para acessar esse ID basta escrever `payload.request.id`.
 
--   `product` é uma unidade de produto a ser pesquisado pela função `find` (nativa de JavaScript). Essa pesquisa é feita em todos os items da lista de produtos até que um primeiro `product` atenda a condição de busca, isto é `product.id == payload.request.id`.
+- `product` é uma unidade de produto a ser pesquisado pela função `find` (nativa de JavaScript). Essa pesquisa é feita em todos os items da lista de produtos até que um primeiro `product` atenda a condição de busca, isto é `product.id == payload.request.id`.
 
--   [products](https://github.com/hsborges/micro-livraria/blob/main/services/inventory/products.json) é um arquivo JSON que contém a descrição dos livros à venda na livraria.
+- [products](https://github.com/hsborges/micro-livraria/blob/main/services/inventory/products.json) é um arquivo JSON que contém a descrição dos livros à venda na livraria.
 
--   `callback` é uma função que deve ser invocada com dois parâmetros:
-    -   O primeiro parâmetro é um objeto de erro, caso ocorra. No nosso exemplo nenhum erro será retornado, portanto `null`.
-    -   O segundo parâmetro é o resultado da função, no nosso caso um `ProductResponse`, assim como definido no arquivo [proto/inventory.proto](https://github.com/hsborges/micro-livraria/blob/main/proto/inventory.proto).
+- `callback` é uma função que deve ser invocada com dois parâmetros:
+  - O primeiro parâmetro é um objeto de erro, caso ocorra. No nosso exemplo nenhum erro será retornado, portanto `null`.
+  - O segundo parâmetro é o resultado da função, no nosso caso um `ProductResponse`, assim como definido no arquivo [proto/inventory.proto](https://github.com/hsborges/micro-livraria/blob/main/proto/inventory.proto).
 
-#### Passo 4
+### Passo 4
 
 Para finalizar, temos que incluir a função `SearchProductByID` em nosso `Controller`. Para isso, você deve incluir uma nova rota `/product/{id}` que receberá o ID do produto como parâmetro. Na definição da rota, você deve também incluir a chamada para o método definido no Passo 3.
 
@@ -227,7 +227,7 @@ Para ficar claro: até aqui, apenas implementamos a nova operação no backend. 
 
 **IMPORTANTE**: Se tudo funcionou corretamente, dê um **COMMIT & PUSH** (e certifique-se de que seu repositório no GitHub foi atualizado; isso é fundamental para seu trabalho ser devidamente corrigido).
 
-```bash
+```sh
 git add --all
 git commit -m "Tarefa prática #1 - Microservices"
 git push origin main
@@ -237,7 +237,7 @@ git push origin main
 
 Nesta segunda tarefa, você irá criar um novo microsserviço dedicado à funcionalidade de avaliações de livros. Esse serviço permitirá que os usuários adicionem comentários e notas aos livros da livraria, além de visualizar as avaliações de outros usuários.
 
-#### Passo 1
+### Passo 1
 
 Primeiro, vamos criar um arquivo `.proto` para definir as operações do novo serviço. Crie um arquivo `review.proto` no diretório `/proto` com o seguinte conteúdo:
 
@@ -273,10 +273,10 @@ message OperationResponse {
 
 Este arquivo define duas operações principais:
 
--   `GetReviews`: para recuperar todas as avaliações de um produto específico
--   `AddReview`: para adicionar uma nova avaliação a um produto
+- `GetReviews`: para recuperar todas as avaliações de um produto específico
+- `AddReview`: para adicionar uma nova avaliação a um produto
 
-#### Passo 2
+### Passo 2
 
 Agora, vamos criar a estrutura do novo microsserviço. Crie um diretório `review` dentro de `/services` e adicione um arquivo `index.js` com o seguinte conteúdo:
 
@@ -448,11 +448,11 @@ Como ilustrado na próxima figura, o Dockerfile é utilizado para gerar uma imag
 
 No Dockerfile, você precisa incluir cinco instruções
 
--   `FROM`: tecnologia que será a base de criação da imagem.
--   `WORKDIR`: diretório da imagem na qual os comandos serão executados.
--   `COPY`: comando para copiar o código fonte para a imagem.
--   `RUN`: comando para instalação de dependências.
--   `CMD`: comando para executar o seu código quando o container for criado.
+- `FROM`: tecnologia que será a base de criação da imagem.
+- `WORKDIR`: diretório da imagem na qual os comandos serão executados.
+- `COPY`: comando para copiar o código fonte para a imagem.
+- `RUN`: comando para instalação de dependências.
+- `CMD`: comando para executar o seu código quando o container for criado.
 
 Ou seja, nosso Dockerfile terá as seguintes linhas:
 
@@ -473,23 +473,23 @@ RUN npm install
 CMD ["node", "/app/services/shipping/index.js"]
 ```
 
-#### Passo 2
+### Passo 2
 
 Agora nós vamos compilar o Dockerfile e criar a imagem. Para isto, execute o seguinte comando em um terminal do seu sistema operacional (esse comando precisa ser executado na raiz do projeto; ele pode também demorar um pouco mais para ser executado).
 
-```
+```sh
 docker build -t micro-livraria/shipping -f shipping.Dockerfile ./
 ```
 
 onde:
 
--   `docker build`: comando de compilação do Docker.
--   `-t micro-livraria/shipping`: tag de identificação da imagem criada.
--   `-f shipping.Dockerfile`: dockerfile a ser compilado.
+- `docker build`: comando de compilação do Docker.
+- `-t micro-livraria/shipping`: tag de identificação da imagem criada.
+- `-f shipping.Dockerfile`: dockerfile a ser compilado.
 
 O `./` no final indica que estamos executando os comandos do Dockerfile tendo como referência a raiz do projeto.
 
-#### Passo 3
+### Passo 3
 
 Antes de iniciar o serviço via container Docker, precisamos remover a inicialização dos serviços de Shipping e Reviews do comando `npm run start`. Para isso, basta remover os sub-comandos `start-shipping` e `start-reviews` do arquivo [package.json](https://github.com/hsborges/micro-livraria/blob/main/package.json), conforme mostrado no próximo diff (as linhas com o símbolo "-" no início representam as linhas originais do arquivo; as linhas com o símbolo "+" representam como essas linhas devem ficar após a sua alteração):
 
@@ -514,21 +514,21 @@ Em seguida, você precisa parar o comando antigo (basta usar um CTRL-C no termin
 
 Por fim, para executar a imagem criada no passo anterior (ou seja, colocar de novo o microsserviço de `Shipping` no ar), basta usar o comando:
 
-```
+```sh
 docker run -ti --name shipping -p 3001:3001 micro-livraria/shipping
 ```
 
 onde:
 
--   `docker run`: comando de execução de uma imagem docker.
--   `-ti`: habilita a interação com o container via terminal.
--   `--name shipping`: define o nome do container criado.
--   `-p 3001:3001`: redireciona a porta 3001 do container para sua máquina.
--   `micro-livraria/shipping`: especifica qual a imagem deve-se executar.
+- `docker run`: comando de execução de uma imagem docker.
+- `-ti`: habilita a interação com o container via terminal.
+- `--name shipping`: define o nome do container criado.
+- `-p 3001:3001`: redireciona a porta 3001 do container para sua máquina.
+- `micro-livraria/shipping`: especifica qual a imagem deve-se executar.
 
 Se tudo estiver correto, você irá receber a seguinte mensagem em seu terminal:
 
-```
+```text
 Shipping Service running
 ```
 
@@ -538,42 +538,42 @@ E o Controller pode acessar o serviço diretamente através do container Docker.
 
 **IMPORTANTE**: Se tudo funcionou corretamente, dê um **COMMIT & PUSH** (e certifique-se de que seu repositório no GitHub foi atualizado; isso é fundamental para seu trabalho ser devidamente corrigido).
 
-```bash
+```sh
 git add --all
 git commit -m "Tarefa prática #3 - Docker"
 git push origin main
 ```
 
-#### Passo 4
+### Passo 4
 
 Como tudo funcionou corretamente, já podemos encerrar o container e limpar nosso ambiente. Para isso, utilizaremos os seguintes comandos:
 
-```
+```sh
 docker stop shipping
 ```
 
 onde:
 
--   `docker stop`: comando para interromper a execução de um container.
--   `shipping`: nome do container que será interrompido.
+- `docker stop`: comando para interromper a execução de um container.
+- `shipping`: nome do container que será interrompido.
 
-```
+```sh
 docker rm shipping
 ```
 
 onde:
 
--   `docker rm`: comando para remover um container.
--   `shipping`: nome do container que será removido.
+- `docker rm`: comando para remover um container.
+- `shipping`: nome do container que será removido.
 
-```
+```sh
 docker rmi micro-livraria/shipping
 ```
 
 onde:
 
--   `docker rmi`: comando para remover uma imagem.
--   `micro-livraria/shipping`: nome da imagem que será removida.
+- `docker rmi`: comando para remover uma imagem.
+- `micro-livraria/shipping`: nome da imagem que será removida.
 
 ## Comentários Finais
 
